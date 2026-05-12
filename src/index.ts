@@ -35,6 +35,14 @@ imapService.setAccountManager(accountManager);
 // Register all tools
 registerTools(server, imapService, accountManager, smtpService, spamService);
 
+async function shutdown() {
+  await imapService.disconnectAll();
+  process.exit(0);
+}
+
+process.on('SIGTERM', shutdown);
+process.on('SIGINT', shutdown);
+
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);

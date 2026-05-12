@@ -165,6 +165,11 @@ export class ImapService {
     }
   }
 
+  async disconnectAll(): Promise<void> {
+    const ids = Array.from(this.connections.keys());
+    await Promise.allSettled(ids.map(id => this.disconnect(id)));
+  }
+
   private async ensureConnected(accountId: string): Promise<ImapFlow> {
     let state = this.connections.get(accountId);
     if (!state) {
